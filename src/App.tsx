@@ -1,76 +1,125 @@
-import { Redirect, Route } from 'react-router-dom';
 import {
-  IonApp,
-  IonIcon,
+  IonButton,
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
   IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact
-} from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+  IonList,
+  IonPage,
+  IonRadio,
+  IonRadioGroup,
+  IonRange,
+  IonTitle,
+  IonToolbar,
+  setupIonicReact,
+} from '@ionic/react'
+import { useState } from 'react'
 
-/* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+/* CSS principal requerido para que los componentes de Ionic funcionen correctamente */
+import '@ionic/react/css/core.css'
 
-/* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
+/* CSS básico para aplicaciones construidas con Ionic */
+import '@ionic/react/css/normalize.css'
+import '@ionic/react/css/structure.css'
+import '@ionic/react/css/typography.css'
 
-/* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
+/* Utilidades CSS opcionales que se pueden comentar */
+import '@ionic/react/css/padding.css'
+import '@ionic/react/css/float-elements.css'
+import '@ionic/react/css/text-alignment.css'
+import '@ionic/react/css/text-transformation.css'
+import '@ionic/react/css/flex-utils.css'
+import '@ionic/react/css/display.css'
 
-/* Theme variables */
-import './theme/variables.css';
+/* Variables del tema */
+import './theme/variables.css'
+import './App.css'
 
-setupIonicReact();
+setupIonicReact()
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/tab1" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon aria-hidden="true" icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  const [totalAmount, setTotalAmount] = useState<number>(0)
+  const [numberOfPeople, setNumberOfPeople] = useState<number>(1)
+  const [tipPercentage, setTipPercentage] = useState<number>(15)
+  const [amountPerPerson, setAmountPerPerson] = useState<number>(0)
 
-export default App;
+  const calculateAmountPerPerson = (): number => {
+    if (totalAmount === 0 || numberOfPeople === 0) return 0
+    const totalWithTip = totalAmount + (totalAmount * tipPercentage) / 100
+    return totalWithTip / numberOfPeople
+  }
+
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Calculadora de Propinas</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent className='ion-padding'>
+        <IonList>
+          <IonItem>
+            <IonLabel position='stacked'>Importe total de la cuenta</IonLabel>
+            <IonInput
+              type='number'
+              min={0}
+              value={totalAmount}
+              onIonChange={(e) => setTotalAmount(Math.abs(parseInt(e.detail.value!, 10)))}
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonLabel position='stacked'>Número de comensales</IonLabel>
+            <IonInput
+              type='number'
+              min={1}
+              value={numberOfPeople}
+              onIonChange={(e) => setNumberOfPeople(Math.abs(parseInt(e.detail.value!, 10)))}
+            ></IonInput>
+          </IonItem>
+          <IonRadioGroup value={tipPercentage} onIonChange={(e) => setTipPercentage(parseInt(e.detail.value!, 10))}>
+            <IonList>
+              <IonItem>
+                <IonLabel>Porcentaje de Propina</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonLabel>15%</IonLabel>
+                <IonRadio slot='start' value={15} />
+              </IonItem>
+              <IonItem>
+                <IonLabel>20%</IonLabel>
+                <IonRadio slot='start' value={20} />
+              </IonItem>
+              <IonItem>
+                <IonLabel>25%</IonLabel>
+                <IonRadio slot='start' value={25} />
+              </IonItem>
+              <IonItem>
+                <IonLabel>Personalizado ({tipPercentage}%)</IonLabel>
+                <IonRange
+                  min={0}
+                  max={100}
+                  step={1}
+                  snaps={true}
+                  value={tipPercentage}
+                  onIonChange={(e) => setTipPercentage(parseInt(e.detail.value as unknown as string, 10))}
+                >
+                  <IonLabel slot='start'>0%</IonLabel>
+                  <IonLabel slot='end'>100%</IonLabel>
+                </IonRange>
+              </IonItem>
+              <IonItem className='ion-padding-horizontal' color={'success'}>
+                <IonLabel className='amount-per-person'>Importe por comensal: $ {amountPerPerson.toFixed(2)}</IonLabel>
+              </IonItem>
+            </IonList>
+          </IonRadioGroup>
+        </IonList>
+        <IonButton expand='full' onClick={() => setAmountPerPerson(calculateAmountPerPerson())}>
+          Calcular
+        </IonButton>
+      </IonContent>
+    </IonPage>
+  )
+}
+
+export default App
