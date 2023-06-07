@@ -1,0 +1,8 @@
+{
+  "name": "Trabajo Final Hibridas",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite",
+  "id": "0378785c"
+}
