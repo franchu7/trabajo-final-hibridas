@@ -46,7 +46,7 @@ const App: React.FC = () => {
 
   const calculateAmountPerPerson = (): number => {
     if (totalAmount === 0 || numberOfPeople === 0) return 0
-    const totalWithTip = totalAmount + (totalAmount * tipPercentage) / 100
+    const totalWithTip = totalAmount * tipPercentage / 100 + totalAmount
     return totalWithTip / numberOfPeople
   }
 
