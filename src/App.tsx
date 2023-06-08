@@ -80,7 +80,7 @@ const App: React.FC = () => {
           <IonRadioGroup value={tipPercentage} onIonChange={(e) => setTipPercentage(parseInt(e.detail.value!, 10))}>
             <IonList>
               <IonItem>
-                <IonLabel>Porcentaje de Propina</IonLabel>
+                <IonLabel>Porcentaje de Propina ({tipPercentage}%)</IonLabel>
               </IonItem>
               <IonItem>
                 <IonLabel>15%</IonLabel>
@@ -95,7 +95,6 @@ const App: React.FC = () => {
                 <IonRadio slot='start' value={25} />
               </IonItem>
               <IonItem>
-                <IonLabel>Personalizado ({tipPercentage}%)</IonLabel>
                 <IonRange
                   min={0}
                   max={100}
